@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
+../include/Graph.h
+array
+-
+vector
+-
+
 /home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.cpp
+iostream
+-
+cmath
+-
+Graph.h
+/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.h
 
 /home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Node.cpp
 
@@ -23,4 +35,6 @@ fstream
 -
 vector
 -
+Graph.h
+/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.h
 
