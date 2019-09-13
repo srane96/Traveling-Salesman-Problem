@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "Graph.h"
 Graph::Graph(const int& v) :
 	m_NoOfNodes(v)
@@ -63,16 +64,15 @@ void Graph::metricTSP(int startingNode)
 	/**
 	*	Prim's algorithm
 	*	1. start from the starting node
-		2. update weights of all it's neighbours by dist betn them
-			(if it is less than already existing weight)
-		3. go to node with the shortest weight and repeat the process.
+	*	2. update weights of all it's neighbours by dist betn them
+	*		(if it is less than already existing weight)
+	*	3. go to node with the shortest weight and repeat the process.
 	*
 	*/
 	int curr_node_index;
 	for(int i=0; i < m_NoOfNodes; i++) {
 		curr_node_index = getMinWeight(weights, visited);
 		visited[curr_node_index] = true;
-		std::cout << "Currrrr: " << curr_node_index << std::endl;
 		for(int j=0; j < m_NoOfNodes; j++) {
 			if(m_AdjGraph[curr_node_index][j] < weights[j] && !visited[j]){
 				weights[j] = m_AdjGraph[curr_node_index][j];
@@ -80,8 +80,34 @@ void Graph::metricTSP(int startingNode)
 			}
 		}
 	}
+	std::cout << "Parents " << std::endl;
 	for(int i=0; i < m_NoOfNodes; i++) {
-		std::cout << parents[i] << std::endl;
+		std::cout << i << ": " << parents[i] << std::endl;
+	}
+	std::cout << "end" << std::endl;
+	/**
+	* Note: Now parents array has parent of each node. Now using that I can
+	* either create an adjacency list or a node class structure.
+	*/
+	/**
+	*	create vector of vectors to represent MST
+	*/
+	std::vector<std::vector<int>> mstVector;
+	for (int i=0; i < m_NoOfNodes; i++) {
+		std::vector<int> children;
+		for(int j=0; j < m_NoOfNodes; j++) {
+			if(parents[j] == i)
+				children.push_back(j);
+		}
+		mstVector.push_back(children);
+	}
+	// print each node with its children in MST
+	std::cout << "Using vector" << std::endl;
+	for (int i=0; i<mstVector.size(); i++) {
+		std::cout << i << ":";
+		for(int j=0; j<mstVector[i].size(); j++)
+			std::cout << mstVector[i][j] << " ";
+		std::cout << std::endl;
 	}
 }
 

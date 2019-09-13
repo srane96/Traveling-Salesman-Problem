@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 		int test = 2;
 		Graph graph(nodesVector.size());
 		graph.createAdjacencyMatrix(nodesVector);
-		graph.printAdjacencyMatrix();
+		//graph.printAdjacencyMatrix();
 		graph.metricTSP(1);
 	}
 	return 0;
