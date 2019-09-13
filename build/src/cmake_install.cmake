@@ -1,4 +1,4 @@
-# Install script for directory: /home/siddhesh/Desktop/TSP/src
+# Install script for directory: /home/siddhesh/Desktop/Traveling-Salesman-Problem/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/siddhesh/Desktop/TSP/src/Graph.cpp" "/home/siddhesh/Desktop/TSP/build/src/CMakeFiles/tsp.dir/Graph.cpp.o"
-  "/home/siddhesh/Desktop/TSP/src/Node.cpp" "/home/siddhesh/Desktop/TSP/build/src/CMakeFiles/tsp.dir/Node.cpp.o"
-  "/home/siddhesh/Desktop/TSP/src/main.cpp" "/home/siddhesh/Desktop/TSP/build/src/CMakeFiles/tsp.dir/main.cpp.o"
+  "/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.cpp" "/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/tsp.dir/Graph.cpp.o"
+  "/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Node.cpp" "/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/tsp.dir/Node.cpp.o"
+  "/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/main.cpp" "/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/tsp.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

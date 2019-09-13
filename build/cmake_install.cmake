@@ -1,4 +1,4 @@
-# Install script for directory: /home/siddhesh/Desktop/TSP
+# Install script for directory: /home/siddhesh/Desktop/Traveling-Salesman-Problem
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/siddhesh/Desktop/TSP/build/src/cmake_install.cmake")
+  include("/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/siddhesh/Desktop/TSP/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

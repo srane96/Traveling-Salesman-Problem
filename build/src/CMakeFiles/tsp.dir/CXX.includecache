@@ -6,11 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/siddhesh/Desktop/TSP/src/Graph.cpp
+/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.cpp
 
-/home/siddhesh/Desktop/TSP/src/Node.cpp
+/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Node.cpp
 
-/home/siddhesh/Desktop/TSP/src/main.cpp
+/home/siddhesh/Desktop/Traveling-Salesman-Problem/src/main.cpp
 iostream
+-
+sstream
+-
+string
+-
+array
+-
+fstream
+-
+vector
 -
 
