@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/siddhesh/Desktop/TSP/src/Graph.cpp
+
+/home/siddhesh/Desktop/TSP/src/Node.cpp
+
+/home/siddhesh/Desktop/TSP/src/main.cpp
+iostream
+-
+

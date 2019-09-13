@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/siddhesh/Desktop/TSP/build/src",
+  "command": "/usr/bin/c++    -I/home/siddhesh/Desktop/TSP/include    -std=gnu++14 -o CMakeFiles/tsp.dir/main.cpp.o -c /home/siddhesh/Desktop/TSP/src/main.cpp",
+  "file": "/home/siddhesh/Desktop/TSP/src/main.cpp"
+},
+{
+  "directory": "/home/siddhesh/Desktop/TSP/build/src",
+  "command": "/usr/bin/c++    -I/home/siddhesh/Desktop/TSP/include    -std=gnu++14 -o CMakeFiles/tsp.dir/Graph.cpp.o -c /home/siddhesh/Desktop/TSP/src/Graph.cpp",
+  "file": "/home/siddhesh/Desktop/TSP/src/Graph.cpp"
+},
+{
+  "directory": "/home/siddhesh/Desktop/TSP/build/src",
+  "command": "/usr/bin/c++    -I/home/siddhesh/Desktop/TSP/include    -std=gnu++14 -o CMakeFiles/tsp.dir/Node.cpp.o -c /home/siddhesh/Desktop/TSP/src/Node.cpp",
+  "file": "/home/siddhesh/Desktop/TSP/src/Node.cpp"
+}
+]
