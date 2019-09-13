@@ -7,7 +7,7 @@ class Graph {
 		int m_NoOfNodes = 0;
 		// Note to self: ** is a pointer to the int pointer. It is often used
 		// to create a dynamic 2d array.
-		int **m_AdjGraph;
+		double **m_AdjGraph;
 	public:
 		/*!
 		 * @ brief Graph Constructor
@@ -24,8 +24,22 @@ class Graph {
 		 */
 		void createAdjacencyMatrix(std::vector<std::array<int,2>> nodesVector);
 		/*!
+		 * @ brief helper function to get the index of node with minimum weight
+		 * @ param weights - array of weights
+		 * @ return index of the node
+		 */
+		int getMinWeight(int weights[], bool visited[]);
+		/*!
+		 * @ brief Calculates the tour length for MTSP
+		 * @ param Index of starting node. Starting from 1
+		 */
+		void metricTSP(int startingNode);
+		/*!
 		 * @ brief Print adjacency matrix
 		 */
 		void printAdjacencyMatrix();
+		/*!
+		 * @ brief 
+		 */
 };
 #endif // GRAPH_DEFINED
