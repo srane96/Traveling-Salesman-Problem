@@ -24,7 +24,7 @@ class Graph {
 		 */
 		void createAdjacencyMatrix(std::vector<std::array<int,2>> nodesVector);
 		/*!
-		 * @ brief helper function to get the index of node with minimum weight
+		 * @ brief Helper function to get the index of node with minimum weight
 		 * @ param weights - array of weights
 		 * @ return index of the node
 		 */
@@ -39,7 +39,17 @@ class Graph {
 		 */
 		void printAdjacencyMatrix();
 		/*!
-		 * @ brief 
+		 * @ brief Helper function that returns nearest unvisited neighbour
+		 * 		   of the current node
+		 * @ param curr_node - current node
+		 *		   visited - array of visited nodes
+		 * @ return index of the nearest unvisited neighbour 
 		 */
+		int getNearestNeighbour(int curr_node, bool visited[]);
+		/*!
+		 * @ brief Implements the nearest neighbour heuristics
+		 * @ param Index of the starting node. Starting from 1 
+		 */
+		void nearestNeighbourHeuristics(int startingNode);
 };
 #endif // GRAPH_DEFINED

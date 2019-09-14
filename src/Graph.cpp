@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <stack>
 #include "Graph.h"
 Graph::Graph(const int& v) :
 	m_NoOfNodes(v)
@@ -52,13 +53,15 @@ void Graph::metricTSP(int startingNode)
 	// Create an array for weights, parents, visited - initialize for v values
 	int weights[m_NoOfNodes];
 	int parents[m_NoOfNodes];
-	bool visited[m_NoOfNodes];
+	bool visited[m_NoOfNodes]; // visited nodes for MST generation
+	bool visitedDFS[m_NoOfNodes]; // visited nodes for DFS
 	int startingIndex = startingNode - 1; // Because array index starts from 0
 	// Initialize keys to maximum 
 	for (int i=0; i < m_NoOfNodes; i++) {
 		weights[i] = 999999;
 		parents[i] = -1;
 		visited[i] = false;
+		visitedDFS[i] = false;
 	}
 	weights[startingIndex] = 0;
 	/**
@@ -67,7 +70,6 @@ void Graph::metricTSP(int startingNode)
 	*	2. update weights of all it's neighbours by dist betn them
 	*		(if it is less than already existing weight)
 	*	3. go to node with the shortest weight and repeat the process.
-	*
 	*/
 	int curr_node_index;
 	for(int i=0; i < m_NoOfNodes; i++) {
@@ -102,13 +104,43 @@ void Graph::metricTSP(int startingNode)
 		mstVector.push_back(children);
 	}
 	// print each node with its children in MST
-	std::cout << "Using vector" << std::endl;
 	for (int i=0; i<mstVector.size(); i++) {
 		std::cout << i << ":";
 		for(int j=0; j<mstVector[i].size(); j++)
 			std::cout << mstVector[i][j] << " ";
 		std::cout << std::endl;
 	}
+	// Create DFS search on mstVector
+	std::vector<int> finalPath;
+	std::stack<int> s;
+	s.push(startingIndex);
+	while(!s.empty()) {
+		int curr_node = s.top();
+		s.pop();
+		visitedDFS[curr_node] = true;
+ 		for(int k=0; k<mstVector[curr_node].size(); k++) {
+ 			int c = mstVector[curr_node][k]; // get the child
+ 			if(!visitedDFS[c]) {
+ 				s.push(c);
+ 			} 
+ 		}
+ 		finalPath.push_back(curr_node); // +1 because index start from 0
+	}
+	finalPath.push_back(startingIndex); // Add first element in the end
+	std::cout << std::endl;
+	// Print final path
+	for(int i=0; i<finalPath.size(); i++) {
+		std::cout << finalPath[i] << " ";
+	}
+	std::cout << std::endl;
+	// Final path length
+	double path_length = 0;
+	for(int i=0; i<finalPath.size()-1; i++) {
+		int first = finalPath[i];
+		int second = finalPath[i+1];
+		path_length += m_AdjGraph[first][second];
+	}
+	std::cout << "Path length Without Heuristics: " << path_length << std::endl;
 }
 
 void Graph::printAdjacencyMatrix()
@@ -120,4 +152,51 @@ void Graph::printAdjacencyMatrix()
 		}
 		std::cout << std::endl;
 	}
+}
+
+int Graph::getNearestNeighbour(int curr_node, bool visited[]) {
+	int minDist = 999999;
+	int minIndex = -1;
+	for(int i=0; i < m_NoOfNodes; i++) {
+		if(m_AdjGraph[curr_node][i] < minDist && !visited[i]) {
+			minDist = m_AdjGraph[curr_node][i];
+			minIndex = i;
+		}
+	}
+	return minIndex;
+}
+
+void Graph::nearestNeighbourHeuristics(int startingNode) {
+	int startingIndex = startingNode - 1;
+	bool visited[m_NoOfNodes];
+	for (int i=0; i < m_NoOfNodes; i++) {
+		visited[i] = false;
+	}
+	int noOfVisitedNodes = 1;
+	std::vector<int> finalPath;
+	// start from the starting index and loop until you visit all nodes
+	int curr_node = startingIndex;
+	visited[curr_node] = true;
+	finalPath.push_back(curr_node);
+	while(noOfVisitedNodes < m_NoOfNodes) {
+		int curr_node = getNearestNeighbour(curr_node, visited);
+		visited[curr_node] = true;
+		if(curr_node != -1)
+			finalPath.push_back(curr_node);
+		noOfVisitedNodes += 1;
+	}
+	finalPath.push_back(startingIndex);
+	// Print final path
+	for(int i=0; i<finalPath.size(); i++) {
+		std::cout << finalPath[i] << " ";
+	}
+	std::cout << std::endl;
+	// Final path length
+	double path_length = 0;
+	for(int i=0; i<finalPath.size()-1; i++) {
+		int first = finalPath[i];
+		int second = finalPath[i+1];
+		path_length += m_AdjGraph[first][second];
+	}
+	std::cout << "Path length with nearest neighbour heuristics: " << path_length << std::endl;
 }

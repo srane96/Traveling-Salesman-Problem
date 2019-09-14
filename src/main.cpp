@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
 		graph.createAdjacencyMatrix(nodesVector);
 		//graph.printAdjacencyMatrix();
 		graph.metricTSP(1);
+		graph.nearestNeighbourHeuristics(1);
 	}
 	return 0;
 }
