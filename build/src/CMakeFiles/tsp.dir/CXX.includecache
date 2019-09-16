@@ -17,9 +17,13 @@ iostream
 -
 cmath
 -
+string
+-
 vector
 -
 stack
+-
+fstream
 -
 Graph.h
 /home/siddhesh/Desktop/Traveling-Salesman-Problem/src/Graph.h

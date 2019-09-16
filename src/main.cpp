@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
 	  * just a container that encapsulates fixed size arrays.
 	**/
 	vector<array<int,2>> nodesVector;
+	string file_name;
 	if (argc != 2) {
 		cout << "No argument provided." << endl;
 		return -1;
@@ -29,16 +30,22 @@ int main(int argc, char** argv) {
 		// creating this to avoid first 6 lines that only contain strings
 		int line_count = 0;
 		int a, b, c;
+		string temp, inp;
 		while(getline(myfile,line)) {
 			if (line_count < 6) {
+				istringstream iss(line);
+				iss >> temp >> temp >> inp;
+				// get the file name
+				if (line_count == 0) {
+					file_name = inp;
+				}
 				line_count +=1;
 				continue;
 			}
 			istringstream iss(line);
 			iss >> a >> b >> c;
 			// cout << a << " " << b << " " << c << endl;
-			// if a is zero then it means it is the last line. It is a duplicate. I have
-			// no idea why it is printing the last element twice. 
+			// if a is zero then it means it is the last line. It is a duplicate.
 			if(a!=0) {
 				array<int, 2> nodeArray = {b,c};
 				nodesVector.push_back(nodeArray);
@@ -46,15 +53,15 @@ int main(int argc, char** argv) {
 			line_count += 1;
 		}
 		myfile.close(); 
-		cout << "Total " << nodesVector.size() << " nodes read from tsp file " << endl;
 	}
-	// create an adjancy graph using htis vector of arrays
+	// create an adjancy graph using this vector of arrays
 	if(nodesVector.size() > 0) {
 		int test = 2;
 		Graph graph(nodesVector.size());
 		graph.createAdjacencyMatrix(nodesVector);
 		//graph.printAdjacencyMatrix();
-		graph.metricTSP(1);
+		std::vector<int> finalPath;
+		graph.metricTSP(1,file_name);
 		graph.nearestNeighbourHeuristics(1);
 	}
 	return 0;

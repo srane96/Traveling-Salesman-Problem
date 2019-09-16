@@ -30,10 +30,10 @@ class Graph {
 		 */
 		int getMinWeight(int weights[], bool visited[]);
 		/*!
-		 * @ brief Calculates the tour length for MTSP
+		 * @ brief Calculates the tour length for MTSP and prints the log to an output file
 		 * @ param Index of starting node. Starting from 1
 		 */
-		void metricTSP(int startingNode);
+		void metricTSP(int startingNode, std::string file_name);
 		/*!
 		 * @ brief Print adjacency matrix
 		 */

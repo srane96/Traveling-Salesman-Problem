@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <vector>
 #include <stack>
+#include <fstream>
 #include "Graph.h"
 Graph::Graph(const int& v) :
 	m_NoOfNodes(v)
@@ -46,7 +48,7 @@ int Graph::getMinWeight(int weights[], bool visited[]) {
 	return minIndex;
 }
 
-void Graph::metricTSP(int startingNode)
+void Graph::metricTSP(int startingNode,std::string file_name)
 {
 	// Following section implements Prim's algorithm to get MST
 	//
@@ -82,11 +84,12 @@ void Graph::metricTSP(int startingNode)
 			}
 		}
 	}
-	std::cout << "Parents " << std::endl;
-	for(int i=0; i < m_NoOfNodes; i++) {
-		std::cout << i << ": " << parents[i] << std::endl;
-	}
-	std::cout << "end" << std::endl;
+	// Print parent index of each node
+	//std::cout << "Parents " << std::endl;
+	//for(int i=0; i < m_NoOfNodes; i++) {
+	//	std::cout << i << ": " << parents[i] << std::endl;
+	//}
+	//std::cout << "end" << std::endl;
 	/**
 	* Note: Now parents array has parent of each node. Now using that I can
 	* either create an adjacency list or a node class structure.
@@ -103,13 +106,26 @@ void Graph::metricTSP(int startingNode)
 		}
 		mstVector.push_back(children);
 	}
-	// print each node with its children in MST
+	// print MST cost
+	int mstCost = 0;
+	for(int i=0; i < mstVector.size(); i++) {
+		for(int j=0; j<mstVector[i].size(); j++) {
+			int child = mstVector[i][j];
+			mstCost += m_AdjGraph[i][child];
+		}
+	}
+	std::cout << "MST Cost: " << mstCost << std::endl;
+	//
+	// print each node with its children in MST 
+	// Uncomment this to view the output
+	/**
 	for (int i=0; i<mstVector.size(); i++) {
 		std::cout << i << ":";
 		for(int j=0; j<mstVector[i].size(); j++)
 			std::cout << mstVector[i][j] << " ";
 		std::cout << std::endl;
 	}
+	**/
 	// Create DFS search on mstVector
 	std::vector<int> finalPath;
 	std::stack<int> s;
@@ -129,8 +145,9 @@ void Graph::metricTSP(int startingNode)
 	finalPath.push_back(startingIndex); // Add first element in the end
 	std::cout << std::endl;
 	// Print final path
+	std::cout << "Path without heuristics" << std::endl;
 	for(int i=0; i<finalPath.size(); i++) {
-		std::cout << finalPath[i] << " ";
+		std::cout << finalPath[i]+1 << " ";
 	}
 	std::cout << std::endl;
 	// Final path length
@@ -141,6 +158,21 @@ void Graph::metricTSP(int startingNode)
 		path_length += m_AdjGraph[first][second];
 	}
 	std::cout << "Path length Without Heuristics: " << path_length << std::endl;
+
+	// print the final path to an output file
+	std::ofstream outputFile;
+	std::string outputName = file_name + ".out.tour";
+	outputFile.open(outputName);
+	outputFile << "Name: " << outputName << std::endl;
+	outputFile << "COMMENT: Tour for " << outputName << std::endl;
+	outputFile << "TYPE: TOUR" << std::endl;
+	outputFile << "DIMENSION: " << m_NoOfNodes << std::endl;
+	outputFile << "TOUR SECTION " << std::endl;
+	for(int i=0; i<finalPath.size(); i++) {
+		outputFile << finalPath[i] +1 << std::endl;
+	}
+	outputFile << -1 << std::endl;
+	outputFile << "EOF" << std::endl;
 }
 
 void Graph::printAdjacencyMatrix()
@@ -179,16 +211,18 @@ void Graph::nearestNeighbourHeuristics(int startingNode) {
 	visited[curr_node] = true;
 	finalPath.push_back(curr_node);
 	while(noOfVisitedNodes < m_NoOfNodes) {
-		int curr_node = getNearestNeighbour(curr_node, visited);
-		visited[curr_node] = true;
-		if(curr_node != -1)
+		curr_node = getNearestNeighbour(curr_node, visited);
+		if(curr_node != -1) {
+			visited[curr_node] = true;
 			finalPath.push_back(curr_node);
+		}
 		noOfVisitedNodes += 1;
 	}
+	std::cout << "Path with nearest neighbour approach" << std::endl;
 	finalPath.push_back(startingIndex);
 	// Print final path
 	for(int i=0; i<finalPath.size(); i++) {
-		std::cout << finalPath[i] << " ";
+		std::cout << finalPath[i]+1 << " ";
 	}
 	std::cout << std::endl;
 	// Final path length
@@ -198,5 +232,5 @@ void Graph::nearestNeighbourHeuristics(int startingNode) {
 		int second = finalPath[i+1];
 		path_length += m_AdjGraph[first][second];
 	}
-	std::cout << "Path length with nearest neighbour heuristics: " << path_length << std::endl;
+	std::cout << "Path length with nearest neighbour: " << path_length << std::endl;
 }
