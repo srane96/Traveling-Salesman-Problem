@@ -33,7 +33,7 @@ class Graph {
 		 * @ brief Calculates the tour length for MTSP and prints the log to an output file
 		 * @ param Index of starting node. Starting from 1
 		 */
-		void metricTSP(int startingNode, std::string file_name);
+		std::vector<int> metricTSP(int startingNode, std::string file_name);
 		/*!
 		 * @ brief Print adjacency matrix
 		 */
@@ -51,5 +51,11 @@ class Graph {
 		 * @ param Index of the starting node. Starting from 1 
 		 */
 		void nearestNeighbourHeuristics(int startingNode);
+		/*!
+		 * @ brief this function applies intersection heuristics repeatedly on the computed TSP tour.
+		 *	       it performs the loop which stops only after all the intersections have been removed.
+		 */
+		void intersectionHeuristics(std::vector<int> finalPath, std::vector<std::array<int,2>> nodesCoordinates);
+		double getPathLength(std::vector<int> finalPath);
 };
 #endif // GRAPH_DEFINED

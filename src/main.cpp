@@ -61,8 +61,9 @@ int main(int argc, char** argv) {
 		graph.createAdjacencyMatrix(nodesVector);
 		//graph.printAdjacencyMatrix();
 		std::vector<int> finalPath;
-		graph.metricTSP(1,file_name);
+		finalPath = graph.metricTSP(1,file_name);
 		graph.nearestNeighbourHeuristics(1);
+		graph.intersectionHeuristics(finalPath, nodesVector);
 	}
 	return 0;
 }

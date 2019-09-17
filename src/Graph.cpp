@@ -4,6 +4,7 @@
 #include <vector>
 #include <stack>
 #include <fstream>
+#include <array>
 #include "Graph.h"
 Graph::Graph(const int& v) :
 	m_NoOfNodes(v)
@@ -48,7 +49,7 @@ int Graph::getMinWeight(int weights[], bool visited[]) {
 	return minIndex;
 }
 
-void Graph::metricTSP(int startingNode,std::string file_name)
+std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
 {
 	// Following section implements Prim's algorithm to get MST
 	//
@@ -173,6 +174,8 @@ void Graph::metricTSP(int startingNode,std::string file_name)
 	}
 	outputFile << -1 << std::endl;
 	outputFile << "EOF" << std::endl;
+
+	return finalPath;
 }
 
 void Graph::printAdjacencyMatrix()
@@ -233,4 +236,105 @@ void Graph::nearestNeighbourHeuristics(int startingNode) {
 		path_length += m_AdjGraph[first][second];
 	}
 	std::cout << "Path length with nearest neighbour: " << path_length << std::endl;
+}
+
+// helper function to check the orientation of the three points
+int getOrientation(std::array<int,2> p1, std::array<int,2> p2, std::array<int,2> p3){
+	/**
+	 * the orientation depends on sign of  below expression: 
+	 * (y2 - y1)*(x3 - x2) - (y3 - y2)*(x2 - x1)
+	 * It is nothing but the difference between the slopes
+	 * 0 - colinear
+	 * 1 - clockwise
+	 * 2 - anticlockwise
+	 */
+	int slope_diff = ((p2[1] - p1[1]) * (p3[0] - p2[0])) - ((p2[0] - p1[0]) * (p3[1] - p2[1]));
+	if(slope_diff == 0)
+		return 0;
+	else if(slope_diff > 0)
+		return 1;
+	else return 2;
+}
+
+// helper function to check if a point is on line segment
+// check if point p is on line segment qr
+bool onSegment(std::array<int, 2> p, std::array<int, 2> q, std::array<int, 2> r) {	
+	if(p[0] <= std::max(q[0],r[0]) && p[0] >= std::min(q[0],r[0]) && p[1] <= std::max(q[1],r[1]) && p[1] >= std::min(q[1],r[1])) {
+		return true;
+	}
+	else
+		return false;
+}
+
+// check if given two line segments p1p2 and p3p4 are intersecting
+bool intersectionExists(std::array<int, 2> p1, std::array<int, 2> q1, std::array<int, 2> p2, std::array<int, 2> q2) {
+	int o1 = getOrientation(p1,q1,p2);
+	int o2 = getOrientation(p1,q1,q2);
+	int o3 = getOrientation(p2,q2,p1);
+	int o4 = getOrientation(p2,q2,q1);
+
+	if (o1 != o2 && o3 != o4)
+		return true;
+	// Check if three points are colinear and fourth one lies on the segment
+	/**
+	if(o1 == 0 && onSegment(p2,p1,q1)) return true;
+	if(o2 == 0 && onSegment(q2,p1,q1)) return true;
+	if(o3 == 0 && onSegment(p1,p2,q2)) return true;
+	if(o4 == 0 && onSegment(q1,p2,q2)) return true;
+	**/
+	return false;
+}
+
+double Graph::getPathLength(std::vector<int> finalPath) {
+	double path_length = 0;
+	for(int i=0; i<finalPath.size()-1; i++) {
+		int first = finalPath[i];
+		int second = finalPath[i+1];
+		path_length += m_AdjGraph[first][second];
+	}
+	return path_length;
+}
+
+
+void Graph::intersectionHeuristics(std::vector<int> finalPath, std::vector<std::array<int,2>> nodesCoordinates) {
+	int count = -1;
+	while(count != 0) {
+		count = 0;
+		for(int i=1; i < finalPath.size() - 3; i++) {
+			// get the indices of the vertices from final finalPath.
+			for(int j=i+2; j < finalPath.size() - 2; j++) {
+				bool intersect = false;
+				int i1 = finalPath[i];
+				int i2 = finalPath[i+1];
+				int i3 = finalPath[j];
+				int i4 = finalPath[j+1];
+				// get the coordinates of the corresponding indices
+				std::array<int,2> P1 = nodesCoordinates[i1];
+				std::array<int,2> P2 = nodesCoordinates[i2];
+				std::array<int,2> P3 = nodesCoordinates[i3];
+				std::array<int,2> P4 = nodesCoordinates[i4];
+				intersect = intersectionExists(P1,P2,P3,P4);
+				//std::cout << i1 << " " << i2 << " " << i3 << " " << i4 << std::endl;
+				if(intersect) {
+					// if two points intersect then swap their endpoints
+					// to maintain path connectivity connect first point from first segment
+					// with first point of second segment.
+					// then reverse entire path between these.
+					int s = i+1;
+					int k = j;
+					int temp;
+					while(s < k) {
+						temp = finalPath[s];
+						finalPath[s] = finalPath[k];
+						finalPath[k] = temp;
+						s += 1;
+						k-= 1;
+					}
+					count += 1;
+				}
+			}
+		}
+	}
+	double path_length = getPathLength(finalPath);
+	std::cout << "P:" << path_length << count;
 }
