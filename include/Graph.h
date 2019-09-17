@@ -30,6 +30,12 @@ class Graph {
 		 */
 		int getMinWeight(int weights[], bool visited[]);
 		/*!
+		 * @ brief helper function to print the total cost of the path provided
+		 * @ param finalPath - vector with indices of the path nodes in order
+		 * @ return total edge cost of the path
+		 */
+		double getPathLength(std::vector<int> finalPath);
+		/*!
 		 * @ brief Calculates the tour length for MTSP and prints the log to an output file
 		 * @ param Index of starting node. Starting from 1
 		 */
@@ -56,6 +62,6 @@ class Graph {
 		 *	       it performs the loop which stops only after all the intersections have been removed.
 		 */
 		void intersectionHeuristics(std::vector<int> finalPath, std::vector<std::array<int,2>> nodesCoordinates);
-		double getPathLength(std::vector<int> finalPath);
+		void createRandom(std::string folder);
 };
 #endif // GRAPH_DEFINED

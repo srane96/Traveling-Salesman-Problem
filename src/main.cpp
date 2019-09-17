@@ -64,6 +64,8 @@ int main(int argc, char** argv) {
 		finalPath = graph.metricTSP(1,file_name);
 		graph.nearestNeighbourHeuristics(1);
 		graph.intersectionHeuristics(finalPath, nodesVector);
+		// Uncomment following line to create a random instance in given folder
+		//graph.createRandom("300");
 	}
 	return 0;
 }

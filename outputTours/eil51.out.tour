@@ -1,0 +1,59 @@
+Name: ../outputTours/eil51.out.tour
+COMMENT: Tour for ../outputTours/eil51.out.tour
+TYPE: TOUR
+DIMENSION: 51
+TOUR SECTION 
+1
+32
+11
+38
+9
+50
+34
+30
+21
+29
+16
+2
+49
+10
+39
+5
+27
+51
+46
+12
+47
+4
+18
+17
+37
+15
+45
+33
+44
+42
+19
+41
+13
+40
+48
+23
+24
+7
+43
+8
+31
+28
+3
+20
+35
+36
+26
+6
+14
+25
+22
+1
+-1
+EOF

@@ -4,7 +4,9 @@
 #include <vector>
 #include <stack>
 #include <fstream>
+#include <stdlib.h>
 #include <array>
+#include <chrono>
 #include "Graph.h"
 Graph::Graph(const int& v) :
 	m_NoOfNodes(v)
@@ -49,8 +51,20 @@ int Graph::getMinWeight(int weights[], bool visited[]) {
 	return minIndex;
 }
 
+double Graph::getPathLength(std::vector<int> finalPath) {
+	double path_length = 0;
+	for(int i=0; i<finalPath.size()-1; i++) {
+		int first = finalPath[i];
+		int second = finalPath[i+1];
+		path_length += m_AdjGraph[first][second];
+	}
+	return path_length;
+}
+
 std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
 {
+	// Start the timer
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	// Following section implements Prim's algorithm to get MST
 	//
 	// Create an array for weights, parents, visited - initialize for v values
@@ -85,19 +99,7 @@ std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
 			}
 		}
 	}
-	// Print parent index of each node
-	//std::cout << "Parents " << std::endl;
-	//for(int i=0; i < m_NoOfNodes; i++) {
-	//	std::cout << i << ": " << parents[i] << std::endl;
-	//}
-	//std::cout << "end" << std::endl;
-	/**
-	* Note: Now parents array has parent of each node. Now using that I can
-	* either create an adjacency list or a node class structure.
-	*/
-	/**
-	*	create vector of vectors to represent MST
-	*/
+	// vector of vectors to represent MST
 	std::vector<std::vector<int>> mstVector;
 	for (int i=0; i < m_NoOfNodes; i++) {
 		std::vector<int> children;
@@ -107,26 +109,6 @@ std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
 		}
 		mstVector.push_back(children);
 	}
-	// print MST cost
-	int mstCost = 0;
-	for(int i=0; i < mstVector.size(); i++) {
-		for(int j=0; j<mstVector[i].size(); j++) {
-			int child = mstVector[i][j];
-			mstCost += m_AdjGraph[i][child];
-		}
-	}
-	std::cout << "MST Cost: " << mstCost << std::endl;
-	//
-	// print each node with its children in MST 
-	// Uncomment this to view the output
-	/**
-	for (int i=0; i<mstVector.size(); i++) {
-		std::cout << i << ":";
-		for(int j=0; j<mstVector[i].size(); j++)
-			std::cout << mstVector[i][j] << " ";
-		std::cout << std::endl;
-	}
-	**/
 	// Create DFS search on mstVector
 	std::vector<int> finalPath;
 	std::stack<int> s;
@@ -144,25 +126,21 @@ std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
  		finalPath.push_back(curr_node); // +1 because index start from 0
 	}
 	finalPath.push_back(startingIndex); // Add first element in the end
-	std::cout << std::endl;
 	// Print final path
+	// End the timer
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::cout << "Path without heuristics" << std::endl;
 	for(int i=0; i<finalPath.size(); i++) {
 		std::cout << finalPath[i]+1 << " ";
 	}
 	std::cout << std::endl;
 	// Final path length
-	double path_length = 0;
-	for(int i=0; i<finalPath.size()-1; i++) {
-		int first = finalPath[i];
-		int second = finalPath[i+1];
-		path_length += m_AdjGraph[first][second];
-	}
+	double path_length = getPathLength(finalPath);
 	std::cout << "Path length Without Heuristics: " << path_length << std::endl;
 
 	// print the final path to an output file
 	std::ofstream outputFile;
-	std::string outputName = file_name + ".out.tour";
+	std::string outputName = "../outputTours/" + file_name + ".out.tour";
 	outputFile.open(outputName);
 	outputFile << "Name: " << outputName << std::endl;
 	outputFile << "COMMENT: Tour for " << outputName << std::endl;
@@ -174,8 +152,42 @@ std::vector<int> Graph::metricTSP(int startingNode,std::string file_name)
 	}
 	outputFile << -1 << std::endl;
 	outputFile << "EOF" << std::endl;
-
+	outputFile.close();
+	// print MST cost
+	int mstCost = 0;
+	for(int i=0; i < mstVector.size(); i++) {
+		for(int j=0; j<mstVector[i].size(); j++) {
+			int child = mstVector[i][j];
+			mstCost += m_AdjGraph[i][child];
+		}
+	}
+	std::cout << "MST Cost: " << mstCost << std::endl;
+	std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::microseconds>(end-begin).count() << "uS" << std::endl;
 	return finalPath;
+}
+
+void Graph::createRandom(std::string folder) 
+{
+	std::ofstream outputFile;
+	srand (time(NULL));
+	for(int i=0; i < 10; i++) {
+		std::string outputName = "../RandomInstances/" + folder + "/" + std::to_string(i+1) + ".tsp";
+		outputFile.open(outputName);
+		outputFile << "NAME : random " << outputName << std::endl;
+		outputFile << "COMMENT: random " << outputName << std::endl;
+		outputFile << "TYPE: TSP" << std::endl;
+		outputFile << "DIMENSION: " << m_NoOfNodes << std::endl;
+		outputFile << "EDGE_WEIGHT_TYPE : EUC_2D " << std::endl;
+		outputFile << "NODE_COORD_SECTION " << std::endl;
+		for(int i=0; i<300; i++) {
+  			/* generate random number between 0 and 100: */
+  			int x = rand() % 100 + 1;
+  			int y = rand() % 100 + 1;
+  			outputFile << i+1 << " " << x << " " << y << std::endl;
+		}
+		outputFile << "EOF" << std::endl;
+		outputFile.close();
+	}
 }
 
 void Graph::printAdjacencyMatrix()
@@ -229,12 +241,7 @@ void Graph::nearestNeighbourHeuristics(int startingNode) {
 	}
 	std::cout << std::endl;
 	// Final path length
-	double path_length = 0;
-	for(int i=0; i<finalPath.size()-1; i++) {
-		int first = finalPath[i];
-		int second = finalPath[i+1];
-		path_length += m_AdjGraph[first][second];
-	}
+	double path_length = getPathLength(finalPath);
 	std::cout << "Path length with nearest neighbour: " << path_length << std::endl;
 }
 
@@ -276,28 +283,17 @@ bool intersectionExists(std::array<int, 2> p1, std::array<int, 2> q1, std::array
 	if (o1 != o2 && o3 != o4)
 		return true;
 	// Check if three points are colinear and fourth one lies on the segment
-	/**
 	if(o1 == 0 && onSegment(p2,p1,q1)) return true;
 	if(o2 == 0 && onSegment(q2,p1,q1)) return true;
 	if(o3 == 0 && onSegment(p1,p2,q2)) return true;
 	if(o4 == 0 && onSegment(q1,p2,q2)) return true;
-	**/
 	return false;
 }
 
-double Graph::getPathLength(std::vector<int> finalPath) {
-	double path_length = 0;
-	for(int i=0; i<finalPath.size()-1; i++) {
-		int first = finalPath[i];
-		int second = finalPath[i+1];
-		path_length += m_AdjGraph[first][second];
-	}
-	return path_length;
-}
-
-
 void Graph::intersectionHeuristics(std::vector<int> finalPath, std::vector<std::array<int,2>> nodesCoordinates) {
-	int count = -1;
+	int count = -1; // count of how many intersections exist
+	// keep looping until all the intersections are removed
+	int maxItr = 100; // maximum iterations
 	while(count != 0) {
 		count = 0;
 		for(int i=1; i < finalPath.size() - 3; i++) {
@@ -334,7 +330,16 @@ void Graph::intersectionHeuristics(std::vector<int> finalPath, std::vector<std::
 				}
 			}
 		}
+		maxItr += 1;
+		if(maxItr >=100)
+			break;
 	}
+	std::cout << "Path with intersection removal heuristics" << std::endl;
+	// Print final path
+	for(int i=0; i<finalPath.size(); i++) {
+		std::cout << finalPath[i]+1 << " ";
+	}
+	std::cout << std::endl;
 	double path_length = getPathLength(finalPath);
-	std::cout << "P:" << path_length << count;
+	std::cout << "Path length with intersect removal heuristics:" << path_length << std::endl;
 }
