@@ -1,5 +1,0 @@
-/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/CMakeFiles/edit_cache.dir
-/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/CMakeFiles/rebuild_cache.dir
-/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/edit_cache.dir
-/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/rebuild_cache.dir
-/home/siddhesh/Desktop/Traveling-Salesman-Problem/build/src/CMakeFiles/tsp.dir

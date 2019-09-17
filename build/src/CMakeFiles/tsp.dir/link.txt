@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/tsp.dir/main.cpp.o CMakeFiles/tsp.dir/Graph.cpp.o CMakeFiles/tsp.dir/Node.cpp.o  -o tsp -rdynamic 
